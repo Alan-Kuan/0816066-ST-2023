@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "0816066-st-2023"
+version = "0.1.0"
+description = ""
+authors = ["Alan-Kuan <kuanhaoan@gmail.com>"]
+readme = "README.md"
+packages = [{include = "0816066_st_2023"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[tool.poetry.group.dev.dependencies]
+coverage = "^7.2.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
