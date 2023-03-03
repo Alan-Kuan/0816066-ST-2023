@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "0816066_st_2023"}]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "~3.8"
 
 
 [tool.poetry.group.dev.dependencies]
