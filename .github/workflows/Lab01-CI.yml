@@ -1,6 +1,9 @@
 name: Lab01 CI
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+on:
+  push:
+    paths:
+      - Lab01/**
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
