@@ -7,11 +7,12 @@ readme = "README.md"
 packages = [{include = "0816066_st_2023"}]
 
 [tool.poetry.dependencies]
-python = "~3.8"
+python = ">=3.8.1,<3.9"
 
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.2.1"
+flake8 = "^6.0.0"
 
 [build-system]
 requires = ["poetry-core"]
