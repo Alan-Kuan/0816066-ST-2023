@@ -23,7 +23,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8
     - name: Lint with flake8
-      run: flake8 calculator_test.py
+      run: flake8 Lab03/calculator_test.py
     - name: Test with unittest
       run: |
         cd Lab03
