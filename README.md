@@ -6,3 +6,5 @@
 ![Lab01 workflow](https://github.com/Alan-Kuan/0816066-ST-2023/actions/workflows/Lab01-CI.yml/badge.svg)
 
 ![Lab02 workflow](https://github.com/Alan-Kuan/0816066-ST-2023/actions/workflows/Lab02-CI.yml/badge.svg)
+
+![Lab03 workflow](https://github.com/Alan-Kuan/0816066-ST-2023/actions/workflows/Lab03-CI.yml/badge.svg)
