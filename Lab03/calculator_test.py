@@ -3,14 +3,19 @@ from calculator import Calculator
 
 calc = Calculator()
 
+
 def run_test(testcase, func, valid, invalid):
+    func_name = func.__name__
+
     for args, ans in valid:
-        print(f'{ func.__name__ }{ str(args).replace(",)", ")") } = { ans }')
+        call_body = str(args).replace(',)', ')')
+        print(f'{ func_name }{ call_body } = { ans }')
         res = func(*args)
         testcase.assertEqual(res, ans)
 
     args, ex = invalid
-    print(f'{ func.__name__ }{ str(args).replace(",)", ")") } raises { ex.__name__ }')
+    call_body = str(args).replace(',)', ')')
+    print(f'{ func_name }{ call_body } raises { ex.__name__ }')
     testcase.assertRaises(ex, func, *args)
 
     print()
@@ -61,6 +66,7 @@ class ApplicationTest(unittest.TestCase):
         ]
         invalid = (('1',), TypeError)
         run_test(self, calc.exp, valid, invalid)
+
 
 if __name__ == '__main__':
     unittest.main()
