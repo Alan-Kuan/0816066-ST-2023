@@ -1,9 +1,6 @@
 name: Lab03 CI
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on:
-  push:
-    paths:
-      - Lab03/**
+on: [push]
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
@@ -27,5 +24,5 @@ jobs:
     - name: Test with unittest
       run: |
         cd Lab03
-        python3 -m unittest app_test.py 2>/dev/null
-        python3 -m unittest app_test.py -b -v
+        python3 -m unittest calculator_test.py 2>/dev/null
+        python3 -m unittest calculator_test.py -b -v
