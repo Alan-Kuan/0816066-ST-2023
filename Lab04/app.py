@@ -3,9 +3,8 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.utils import ChromeType
 
-driver_path = ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+driver_path = ChromeDriverManager().install()
 
 options = Options()
 options.add_argument('--headless')
