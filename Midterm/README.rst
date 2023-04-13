@@ -83,7 +83,7 @@ q1_6 (15%)
 
 Add some more (possibly 0) tests to achieve 100% coverage of
 ``course_scheduling_system.py``. You can mock ``check_course_exist`` and
-use pragma to excluding ``check_course_exist`` from coverage analysis.
+use pragma to excluding ``check_course_exist`` from coverage analysis. (If you need more than one test method, please name it as test_q1_6_1, test_q1_6_2, ...)
 
 
 |
@@ -139,6 +139,8 @@ To verify Q1 and Q2, please write a GitHub Action configuration file named ``Mid
    # Q1
    $ python3 course_scheduling_system_test.py  -v 1>log.txt
    $ cat log.txt
+   $ coverage run course_scheduling_system_test.py
+   $ coverage report
    
    # Q2
    $ python3 app.py
@@ -153,6 +155,12 @@ Required Output
 .. raw:: html
 
     <img src="https://i.imgur.com/BG5VVxz.png" width="800px">
+
+|
+
+.. raw:: html
+
+    <img src="https://i.imgur.com/vtYER9C.png" width="800px">
 
 |
 
