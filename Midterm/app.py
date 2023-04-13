@@ -21,6 +21,8 @@ driver = webdriver.Chrome(service=Service(driver_path), options=options)
 
 driver.get('https://docs.python.org/3/tutorial/index.html')
 
+# WebDriverWait(driver, timeout=10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.language_switcher_placeholder #language_select')))
+#
 # lang_select_el = driver.find_element(By.CSS_SELECTOR, '.language_switcher_placeholder #language_select')
 # lang_select = Select(lang_select_el)
 # print(lang_select.first_selected_option.text)
@@ -31,6 +33,8 @@ print(h1.text)
 
 p = driver.find_element(By.CSS_SELECTOR, '#the-python-tutorial p')
 print(p.text)
+
+print()
 
 # Q2
 
