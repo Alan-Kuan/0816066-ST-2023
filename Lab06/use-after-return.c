@@ -1,10 +1,12 @@
-int* f(void) {
+int *p;
+
+void f(void) {
     int a = 4;
-    return &a;
+    p = &a;
 }
 
 int main(void) {
-    int* a = f();
-    *a = 1;
+    f();
+    *p = 1;
     return 0;
 }

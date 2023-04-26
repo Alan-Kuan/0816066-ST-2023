@@ -11,11 +11,11 @@
 
 | | Valgrind | ASan |
 | --- | :---: | :---: |
-| Heap Out-of-bound | :white_check_mark: | :white_check_mark: |
-| Stack Out-of-bound | :negative_squared_cross_mark: | :white_check_mark: |
-| Global Out-of-bound | :negative_squared_cross_mark: | :white_check_mark: |
-| Use-after-free | :white_check_mark: | :white_check_mark: |
-| Use-after-return | :white_check_mark: | :white_check_mark: |
+| Heap Out-of-bound | :heavy_check_mark: | :heavy_check_mark: |
+| Stack Out-of-bound | :x: | :heavy_check_mark: |
+| Global Out-of-bound | :x: | :heavy_check_mark: |
+| Use-after-free | :heavy_check_mark: | :heavy_check_mark: |
+| Use-after-return | :x: | :heavy_check_mark: |
 
 ### 1. Heap Out-of-bound
 #### Malfunction Code
@@ -412,73 +412,102 @@ Both Valgrind and ASan detected the error.
 #### Malfunction Code
 **[** use-after-return.c **]**:
 ```c
-int* f(void) {
+int *p;
+
+void f(void) {
     int a = 4;
-    return &a;
+    p = &a;
 }
 
 int main(void) {
-    int* a = f();
-    *a = 1;
+    f();
+    *p = 1;
     return 0;
 }
 ```
 
 #### Valgrind Report
+```sh
+$ gcc ./use-after-return.c -o use-after-return
+$ valgrind ./use-after-return
 ```
-==3456043== Memcheck, a memory error detector
-==3456043== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==3456043== Using Valgrind-3.20.0 and LibVEX; rerun with -h for copyright info
-==3456043== Command: ./use-after-return
-==3456043==
-==3456043== Invalid write of size 4
-==3456043==    at 0x109187: main (in /home/alan/Assignment/Senior/Second_Semester/Software_Testing/0816066-ST-2023/Lab06/use-after-return)
-==3456043==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
-==3456043==
-==3456043==
-==3456043== Process terminating with default action of signal 11 (SIGSEGV): dumping core
-==3456043==  Access not within mapped region at address 0x0
-==3456043==    at 0x109187: main (in /home/alan/Assignment/Senior/Second_Semester/Software_Testing/0816066-ST-2023/Lab06/use-after-return)
-==3456043==  If you believe this happened as a result of a stack
-==3456043==  overflow in your program's main thread (unlikely but
-==3456043==  possible), you can try to increase the size of the
-==3456043==  main thread stack using the --main-stacksize= flag.
-==3456043==  The main thread stack size used in this run was 8388608.
-==3456043==
-==3456043== HEAP SUMMARY:
-==3456043==     in use at exit: 0 bytes in 0 blocks
-==3456043==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
-==3456043==
-==3456043== All heap blocks were freed -- no leaks are possible
-==3456043==
-==3456043== For lists of detected and suppressed errors, rerun with: -s
-==3456043== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
-zsh: segmentation fault (core dumped)  valgrind ./use-after-return
+
+```
+==52166== Memcheck, a memory error detector
+==52166== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==52166== Using Valgrind-3.20.0 and LibVEX; rerun with -h for copyright info
+==52166== Command: ./use-after-return
+==52166==
+==52166==
+==52166== HEAP SUMMARY:
+==52166==     in use at exit: 0 bytes in 0 blocks
+==52166==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
+==52166==
+==52166== All heap blocks were freed -- no leaks are possible
+==52166==
+==52166== For lists of detected and suppressed errors, rerun with: -s
+==52166== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
 
 #### ASan Report
 ```sh
 $ gcc ./use-after-return.c -fsanitize=address -o use-after-return
-$ ./use-after-return
+$ ASAN_OPTIONS=detect_stack_use_after_return=1 ./use-after-return
 ```
 
 ```
-AddressSanitizer:DEADLYSIGNAL
 =================================================================
-==3456941==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x55c05c2562cf bp 0x7ffefa1d7a60 sp 0x7ffefa1d7a50 T0)
-==3456941==The signal is caused by a WRITE memory access.
-==3456941==Hint: address points to the zero page.
-    #0 0x55c05c2562cf in main (/home/alan/Assignment/Senior/Second_Semester/Software_Testing/0816066-ST-2023/Lab06/use-after-return+0x12cf)
-    #1 0x7f00a8e3c78f  (/usr/lib/libc.so.6+0x2378f)
-    #2 0x7f00a8e3c849 in __libc_start_main (/usr/lib/libc.so.6+0x23849)
-    #3 0x55c05c2560a4 in _start (/home/alan/Assignment/Senior/Second_Semester/Software_Testing/0816066-ST-2023/Lab06/use-after-return+0x10a4)
+==45351==ERROR: AddressSanitizer: stack-use-after-return on address 0x7efdb5000020 at pc 0x56127831f2ee bp 0x7ffcdb296900 sp 0x7ffcdb2968f0
+WRITE of size 4 at 0x7efdb5000020 thread T0
+    #0 0x56127831f2ed in main (/home/alan/Assignment/Senior/Second_Semester/Software_Testing/0816066-ST-2023/Lab06/use-after-return+0x12ed)
+    #1 0x7efdb743c78f  (/usr/lib/libc.so.6+0x2378f)
+    #2 0x7efdb743c849 in __libc_start_main (/usr/lib/libc.so.6+0x23849)
+    #3 0x56127831f0c4 in _start (/home/alan/Assignment/Senior/Second_Semester/Software_Testing/0816066-ST-2023/Lab06/use-after-return+0x10c4)
 
-AddressSanitizer can not provide additional info.
-SUMMARY: AddressSanitizer: SEGV (/home/alan/Assignment/Senior/Second_Semester/Software_Testing/0816066-ST-2023/Lab06/use-after-return+0x12cf) in main
-==3456941==ABORTING
+Address 0x7efdb5000020 is located in stack of thread T0 at offset 32 in frame
+    #0 0x56127831f1a8 in f (/home/alan/Assignment/Senior/Second_Semester/Software_Testing/0816066-ST-2023/Lab06/use-after-return+0x11a8)
+
+  This frame has 1 object(s):
+    [32, 36) 'a' (line 4) <== Memory access at offset 32 is inside this variable
+HINT: this may be a false positive if your program uses some custom stack unwind mechanism, swapcontext or vfork
+      (longjmp and C++ exceptions *are* supported)
+SUMMARY: AddressSanitizer: stack-use-after-return (/home/alan/Assignment/Senior/Second_Semester/Software_Testing/0816066-ST-2023/Lab06/use-after-return+0x12ed) in main
+Shadow bytes around the buggy address:
+  0x0fe0369f7fb0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe0369f7fc0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe0369f7fd0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe0369f7fe0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe0369f7ff0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0fe0369f8000: f5 f5 f5 f5[f5]f5 f5 f5 00 00 00 00 00 00 00 00
+  0x0fe0369f8010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe0369f8020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe0369f8030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe0369f8040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe0369f8050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==45351==ABORTING
 ```
 
-Both Valgrind and ASan detected the error although ASan detected but could not tell the reason.
+Only ASan detected the error.
+However, ASan required an option be enabled to detect the error.
 
 ## Experiment 2
 
